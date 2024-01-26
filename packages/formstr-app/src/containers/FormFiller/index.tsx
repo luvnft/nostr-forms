@@ -207,11 +207,11 @@ export const FormFiller: React.FC<FormFillerProps> = ({ formSpec }) => {
           </Link>
           {!isMobile() && (
             <a
-              href="https://github.com/abhay-raizada/nostr-forms"
+              href="https://github.com/luv-nft/nostr-forms"
               className="foss-link"
             >
               <Text className="text-style">
-                Formstr is free and Open Source
+                Form is free and Open Source powered by LUV NFT
               </Text>
             </a>
           )}

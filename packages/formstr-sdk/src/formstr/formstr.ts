@@ -526,7 +526,7 @@ export const sendNotification = async (
     let question = questionMap[response.questionId];
     message += "\n" + question.question + ": \n" + response.answer + "\n";
   });
-  message += "Visit https://formstr.app to view the responses.";
+  message += "Visit https://form.luvnft.com to view the responses.";
   let newSk = generatePrivateKey();
   let newPk = getPublicKey(newSk);
   const pool = new SimplePool();
