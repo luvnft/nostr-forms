@@ -1,8 +1,24 @@
 module.exports = {
-  preset: "ts-jest",
-  testEnvironment: "node",
-  transform: {
-    "^.+\\.(t|j)s?$": "ts-jest",
-  },
-  transformIgnorePatterns: ["<rootDir>/node_modules/"],
+  projects: [
+    {
+      displayName: 'app',
+      preset: 'ts-jest',
+      testEnvironment: 'node',
+      roots: ['<rootDir>/packages/formstr-app'],
+      transform: {
+        '^.+\\.tsx?$': 'ts-jest',
+      },
+      transformIgnorePatterns: ['<rootDir>/node_modules/'],
+    },
+    {
+      displayName: 'sdk',
+      preset: 'ts-jest',
+      testEnvironment: 'node',
+      roots: ['<rootDir>/packages/formstr-sdk'],
+      transform: {
+        '^.+\\.tsx?$': 'ts-jest',
+      },
+      transformIgnorePatterns: ['<rootDir>/node_modules/'],
+    },
+  ],
 };
