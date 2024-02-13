@@ -52,6 +52,10 @@ function Routing() {
       />
       <Route path={`${ROUTES.FORM_FILLER}/*`} element={<FormFiller />} />
       <Route
+        path={`${ROUTES.EMBEDDED}/*`}
+        element={<FormFiller embedded={true} />}
+      />
+      <Route
         path={`${ROUTES.RESPONSES}/*`}
         element={withNostrHeaderWrapper(Responses)}
       />

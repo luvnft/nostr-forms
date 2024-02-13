@@ -17,10 +17,17 @@ function MyForms() {
         </div>
         <div className="text-container">
           <a
+<<<<<<< HEAD
             href="https://github.com/luvnft/nostr-forms"
             className="foss-link"
           >
             <Text className="text-style"> Form is free and open source made with LUV NFT</Text>
+=======
+            href="https://github.com/luv-nft/nostr-forms"
+            className="foss-link"
+          >
+            <Text className="text-style"> LUV NFT VOTE is free.</Text>
+>>>>>>> 7ad076957516c19d83e398890d1d827e8c2fb7fa
           </a>
         </div>
       </div>

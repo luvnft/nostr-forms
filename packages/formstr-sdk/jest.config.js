@@ -1,8 +1,15 @@
 module.exports = {
-  preset: "ts-jest",
-  testEnvironment: "node",
-  transform: {
-    "^.+\\.(t|j)s?$": "ts-jest",
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/$1',
   },
-  transformIgnorePatterns: ["<rootDir>/node_modules/"],
+  preset: 'ts-jest',
+  testEnvironment: 'jsdom',
+  transform: {
+    '^.+\\.(t|j)sx?$': 'ts-jest',
+    '^.+\\.js$': 'babel-jest',
+    '^.+\\.html$': 'html-loader',
+  },
+  transformIgnorePatterns: [
+    '/node_modules/',
+  ],
 };

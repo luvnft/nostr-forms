@@ -13,23 +13,33 @@ export function makeTag(length: number) {
   return result;
 }
 
-export function constructFormUrl(publicKey: string, host: string) {
+export function constructFormUrl(
+  publicKey: string,
+  host: string,
+  embedded = false,
+) {
   if (!publicKey) {
     throw Error("public key is required");
   }
-  return `${host}/#/fill/${publicKey}`;
+  return `${host}/#/${embedded ? "embedded" : "fill"}/${publicKey}`;
 }
-
-export function constructResponseUrl(privateKey: string, host: string) {
+export function constructResponseUrl(
+  privateKey: string,
+  host: string,
+  formId: string,
+) {
   if (!privateKey) {
     throw Error("public key is required");
   }
-  return `${host}/#/response/${privateKey}/responses`;
+  if (formId?.startsWith("nprofile")) {
+    return `${host}/#/response/${privateKey}?formId=${formId}`;
+  }
+  return `${host}/#/response/${privateKey}`;
 }
 
 export function constructDraftUrl(
   draft: { formSpec: unknown; tempId: string } | null,
-  host: string
+  host: string,
 ) {
   if (!draft) {
     return;

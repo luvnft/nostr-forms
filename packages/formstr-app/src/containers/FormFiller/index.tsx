@@ -1,12 +1,12 @@
-import {
-  AnswerTypes,
-  FormSpec,
-  V1Choice,
-  V1FormSpec,
-} from "@formstr/sdk/dist/interfaces";
+import { FormSpec, V1FormSpec } from "@formstr/sdk/dist/interfaces";
 import FillerStyle from "./formFiller.style";
 import FormTitle from "../CreateForm/components/FormTitle";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getFormTemplate, sendResponses, sendNotification } from "@formstr/sdk";
 import { Form, Typography } from "antd";
@@ -20,46 +20,36 @@ import { LOCAL_STORAGE_KEYS, getItem, setItem } from "../../utils/localStorage";
 import { ISubmission } from "../MyForms/components/Submissions/submissions.types";
 import { ROUTES as GLOBAL_ROUTES } from "../../constants/routes";
 import { ROUTES } from "../MyForms/configs/routes";
+import Markdown from "react-markdown";
 
 const { Text } = Typography;
 
 interface FormFillerProps {
   formSpec?: FormSpec;
+  embedded?: boolean;
 }
 
-export const FormFiller: React.FC<FormFillerProps> = ({ formSpec }) => {
+export const FormFiller: React.FC<FormFillerProps> = ({
+  formSpec,
+  embedded,
+}) => {
   const { formId } = useParams();
   const [formTemplate, setFormTemplate] = useState<V1FormSpec | null>(null);
   const [form] = Form.useForm();
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [thankYouScreen, setThankYouScreen] = useState(false);
+  const [searchParams] = useSearchParams();
+  const hideTitleImage = searchParams.get("hideTitleImage") === "true";
+  const hideDescription = searchParams.get("hideDescription") === "true";
   const navigate = useNavigate();
 
   const isPreview = !!formSpec;
 
   const convertFromSpecToTemplate = (formSpec: FormSpec): V1FormSpec => {
     let fields = formSpec.fields?.map((field) => {
-      let answerSettings = field.answerSettings;
-      let answerType = field.answerType;
-      let newChoices: V1Choice[] | undefined;
-      if (
-        answerType ===
-        (AnswerTypes.checkboxes ||
-          AnswerTypes.radioButton ||
-          AnswerTypes.dropdown)
-      ) {
-        newChoices = field.answerSettings.choices?.map((choice) => {
-          return {
-            label: choice.label,
-            isOther: choice.isOther,
-            choiceId: makeTag(6),
-          };
-        });
-      }
       return {
+        ...field,
         questionId: makeTag(6),
-        question: field.question,
-        answerType,
-        answerSettings: { ...answerSettings, choices: newChoices },
       };
     });
     return {
@@ -139,6 +129,7 @@ export const FormFiller: React.FC<FormFillerProps> = ({ formSpec }) => {
     }
     if (formTemplate && !isPreview) sendNotification(formTemplate, response);
     setFormSubmitted(true);
+    setThankYouScreen(true);
   };
 
   let name, settings, fields;
@@ -149,58 +140,104 @@ export const FormFiller: React.FC<FormFillerProps> = ({ formSpec }) => {
   }
   return (
     <FillerStyle $isPreview={isPreview}>
-      <div className="filler-container">
-        <div className="form-filler">
-          <FormTitle
-            className="form-title"
-            edit={false}
-            imageUrl={settings?.titleImageUrl}
-            formTitle={name}
-          />
-          <div className="form-description">
-            <Text>{settings?.description}</Text>
-          </div>
-
-          <Form form={form} onFinish={() => {}}>
-            <div>
-              {fields?.map((field) => {
-                let rules = [
-                  {
-                    required: field.answerSettings.required,
-                    message: "This is a required question",
-                  },
-                  ...getValidationRules(field.answerType, field.answerSettings),
-                ];
-                return (
-                  <Form.Item
-                    key={field.questionId}
-                    rules={rules}
-                    name={field.questionId}
-                  >
-                    <QuestionNode
-                      required={field.answerSettings.required || false}
-                      field={field}
-                      inputHandler={handleInput}
-                    />
-                  </Form.Item>
-                );
-              })}
-              <SubmitButton
-                selfSign={formTemplate?.settings?.disallowAnonymous}
+      {!formSubmitted && (
+        <div className="filler-container">
+          <div className="form-filler">
+            {!hideTitleImage && (
+              <FormTitle
+                className="form-title"
                 edit={false}
-                onSubmit={saveResponse}
-                form={form}
-                disabled={isPreview}
+                imageUrl={settings?.titleImageUrl}
+                formTitle={name}
               />
-            </div>
-          </Form>
+            )}
+            {!hideDescription && (
+              <div className="form-description">
+                <Text>
+                  <Markdown>{settings?.description}</Markdown>
+                </Text>
+              </div>
+            )}
+
+            <Form
+              form={form}
+              onFinish={() => {}}
+              className={
+                hideDescription ? "hidden-description" : "with-description"
+              }
+            >
+              <div>
+                {fields?.map((field) => {
+                  let rules = [
+                    {
+                      required: field.answerSettings.required,
+                      message: "This is a required question",
+                    },
+                    ...getValidationRules(
+                      field.answerType,
+                      field.answerSettings
+                    ),
+                  ];
+                  return (
+                    <Form.Item
+                      key={field.questionId}
+                      rules={rules}
+                      name={field.questionId}
+                    >
+                      <QuestionNode
+                        required={field.answerSettings.required || false}
+                        field={field}
+                        inputHandler={handleInput}
+                      />
+                    </Form.Item>
+                  );
+                })}
+                <SubmitButton
+                  selfSign={formTemplate?.settings?.disallowAnonymous}
+                  edit={false}
+                  onSubmit={saveResponse}
+                  form={form}
+                  disabled={isPreview}
+                />
+              </div>
+            </Form>
+          </div>
+          <div className="branding-container">
+            <Link to="/">
+              <CreatedUsingFormstr />
+            </Link>
+            {!isMobile() && (
+              <a
+                href="https://github.com/abhay-raizada/nostr-forms"
+                className="foss-link"
+              >
+                <Text className="text-style">
+                  Formstr is free and Open Source
+                </Text>
+              </a>
+            )}
+          </div>
         </div>
+      )}
+      {embedded ? (
+        formSubmitted && (
+          <div className="embed-submitted">
+            {" "}
+            <Text>Response Submitted</Text>{" "}
+          </div>
+        )
+      ) : (
         <ThankYouScreen
-          isOpen={formSubmitted}
+          isOpen={thankYouScreen}
           onClose={() => {
-            navigate(`${GLOBAL_ROUTES.MY_FORMS}/${ROUTES.SUBMISSIONS}`);
+            if (!embedded) {
+              navigate(`${GLOBAL_ROUTES.MY_FORMS}/${ROUTES.SUBMISSIONS}`);
+            } else {
+              setThankYouScreen(false);
+            }
           }}
         />
+<<<<<<< HEAD
         <div className="branding-container">
           <Link to="/">
             <CreatedUsingFormstr />
@@ -217,6 +254,9 @@ export const FormFiller: React.FC<FormFillerProps> = ({ formSpec }) => {
           )}
         </div>
       </div>
+=======
+      )}
+>>>>>>> 7ad076957516c19d83e398890d1d827e8c2fb7fa
     </FillerStyle>
   );
 };

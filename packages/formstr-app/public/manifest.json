@@ -1,6 +1,11 @@
 {
+<<<<<<< HEAD
   "short_name": "Form",
   "name": "A Forms app where you own your own data. Made possible by the nostr protocol.",
+=======
+  "short_name": "Vote",
+  "name": "A voting app where you own your own data. Made possible by the nostr protocol.",
+>>>>>>> 7ad076957516c19d83e398890d1d827e8c2fb7fa
   "icons": [
     {
       "src": "favicon.ico",
