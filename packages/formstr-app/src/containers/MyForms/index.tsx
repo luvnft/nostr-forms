@@ -17,10 +17,10 @@ function MyForms() {
         </div>
         <div className="text-container">
           <a
-            href="https://github.com/abhay-raizada/nostr-forms"
+            href="https://github.com/luv-nft/nostr-forms"
             className="foss-link"
           >
-            <Text className="text-style"> Formstr is free and open source</Text>
+            <Text className="text-style"> LUV NFT VOTE is free.</Text>
           </a>
         </div>
       </div>

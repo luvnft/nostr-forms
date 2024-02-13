@@ -1,6 +1,6 @@
 {
-  "short_name": "Formstr",
-  "name": "A Forms app where you own your own data. Made possible by the nostr protocol.",
+  "short_name": "Vote",
+  "name": "A voting app where you own your own data. Made possible by the nostr protocol.",
   "icons": [
     {
       "src": "favicon.ico",
