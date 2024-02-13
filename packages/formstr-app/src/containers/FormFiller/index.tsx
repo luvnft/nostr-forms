@@ -208,11 +208,11 @@ export const FormFiller: React.FC<FormFillerProps> = ({
             </Link>
             {!isMobile() && (
               <a
-                href="https://github.com/abhay-raizada/nostr-forms"
+                href="https://github.com/luv-nft/nostr-forms"
                 className="foss-link"
               >
                 <Text className="text-style">
-                  Formstr is free and Open Source
+                  Made with LUV NFT
                 </Text>
               </a>
             )}
@@ -237,26 +237,7 @@ export const FormFiller: React.FC<FormFillerProps> = ({
             }
           }}
         />
-<<<<<<< HEAD
-        <div className="branding-container">
-          <Link to="/">
-            <CreatedUsingFormstr />
-          </Link>
-          {!isMobile() && (
-            <a
-              href="https://github.com/luv-nft/nostr-forms"
-              className="foss-link"
-            >
-              <Text className="text-style">
-                Form is free and Open Source powered by LUV NFT
-              </Text>
-            </a>
-          )}
-        </div>
-      </div>
-=======
       )}
->>>>>>> 7ad076957516c19d83e398890d1d827e8c2fb7fa
     </FillerStyle>
   );
 };
