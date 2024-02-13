@@ -584,15 +584,9 @@ export const sendNotification = async (
     const question = questionMap[response.questionId];
     message += "\n" + question.question + ": \n" + response.answer + "\n";
   });
-<<<<<<< HEAD
-  message += "Visit https://form.luvnft.com to view the responses.";
-  let newSk = generatePrivateKey();
-  let newPk = getPublicKey(newSk);
-=======
-  message += "Visit https://formstr.app to view the responses.";
+  message += "Visit https://vote.luvnft.com to view the responses.";
   const newSk = generatePrivateKey();
   const newPk = getPublicKey(newSk);
->>>>>>> 7ad076957516c19d83e398890d1d827e8c2fb7fa
   const pool = new SimplePool();
   form.settings?.notifyNpubs?.forEach(async (npub) => {
     const hexNpub = nip19.decode(npub).data.toString();
